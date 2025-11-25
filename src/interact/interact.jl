@@ -83,6 +83,7 @@ function interact(
 	bp = branchplot!(ax_base, f)
 
 	tpp = pathplot!(ax_base, t; name=:base)
+	tpp.hovercolor[] = tpp.regcolor[]
 	register_path_draw!(ax_base, tpp)
 	register_repeat!(ax_base, tpp)
 
@@ -105,7 +106,7 @@ interact(f::ComplexEtaleCover, x::ComplexF64, ll, lb; vertical=false) = interact
 Makes a reactive lift of a path in the base. Requiring a name allows it to be deactivated or deregistered through Makie's interface.
 """
 function liftpathplot!(ax::Axis, f::ComplexEtaleCover, z::ComplexF64, tpp::PathPlot, name::Symbol)
-	xpp = pathplot!(ax, z; name=name)
+	xpp = pathplot!(ax, z; name=name, linear=true)
 
 	register_reset!(ax, xpp)
 

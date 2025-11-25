@@ -139,13 +139,17 @@ return Theme(
 	),
 	PathPlot = (
 		emphcolor = _COLORS[base][:highlight],
+		hovercolor = _COLORS[base][:highlight],
 		regcolor = _COLORS[base][:dark],
 	),
 	BraidPlot = (
 		emphcolor = _COLORS[base][:highlight],
+		hovercolor = _COLORS[base][:highlight],
 		regcolor = _COLORS[base][:dark],
 	),
 	BranchPlot = (
+		markersize = 12,
+		marker = :xcross,
 		color = _COLORS[_OPPOSITE[base]][:highlight],
 	)
 )

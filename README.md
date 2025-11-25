@@ -106,4 +106,3 @@ Most of these will have a button or hotkey associated. The current controls are 
 	- Smoothing (see above).
 	- Close paths to loops; button or hotkey, and perhaps a toggle for automatically doing this after dragging.
 	- Hide interface and export animation.
-	- Highlight path on hover.

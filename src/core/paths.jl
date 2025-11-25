@@ -6,6 +6,7 @@ A list of points, which amounts to a piecewise-linear path in the complex plane.
 struct ComplexPath <: AbstractPath{ComplexF64}
 	elements::Vector{ComplexF64}
 	ComplexPath(P::Vector{ComplexF64}) = new(P)
+	ComplexPath(P::ComplexPath) = P
 	ComplexPath(P::Vector{T}) where T <:Number = new(convert(Vector{ComplexF64},P))
 	ComplexPath(p::T) where T <:Number = new([ComplexF64(p)])
 end
