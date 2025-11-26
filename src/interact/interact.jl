@@ -10,8 +10,8 @@ Create an interactive visualization of the monodromy of a branched cover.
 
 # Arguments
 - `f`: The étale cover to study
-- `t`: Base point
 - `fibers`: Dictionary of lifts of `t`
+- `t`: Base point
 - `limits_lift`: (xmin, xmax, ymin, ymax)
 - `limits_base`: (xmin, xmax, ymin, ymax)
 - `vertical`: Layout orientation

@@ -20,6 +20,7 @@ module Monodromy
 	include("interact/interact.jl")
 
 	include("examples/chebyshev.jl")
+	include("examples/exponential.jl")
 	include("examples/power.jl")
 	include("examples/rabbits.jl")
 	include("examples/symmseven.jl")
@@ -62,6 +63,7 @@ module Monodromy
 	export T4
 	export rabbit_cover
 	export interact_power
+	export interact_exponential
 	export interact_chebyshev
 	export interact_rabbits
 	export interact_symmetric_seven

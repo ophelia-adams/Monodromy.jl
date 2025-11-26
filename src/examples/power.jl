@@ -25,12 +25,13 @@ Play around with the powering map!
 """
 function interact_power(; degree=3, x=1.0+0.0im, vertical=false)
 	f = Power(degree)
-	fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp = interact(
+	visdata = interact(
 		f, x,
 		(-2, 2, -2, 2),
-		(-2, 2, -2, 2);
-		vertical = vertical
+		(-2, 2, -2, 2)
 	)
-	display(fig)
-	return fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp
+
+	display(visdata[:fig])
+
+	return visdata
 end

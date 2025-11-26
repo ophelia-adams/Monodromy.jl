@@ -35,11 +35,14 @@ function interact_symmetric_seven()
 	)
 	base = -4/3 + 0.0im
 
-	fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp = interact(
+	visdata = interact(
 		symmetric_seven(),
 		fibers, base,
 		(-5,5,-5,5),(-2,2,-2,2);
-		vertical=true)
-	display(fig)
-	return fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp
+		vertical=true
+	)
+
+	display(visdata[:fig])
+
+	return visdata
 end

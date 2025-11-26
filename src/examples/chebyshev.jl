@@ -18,12 +18,12 @@ function interact_chebyshev()
 		:d => -sqrt(3) + 0.0im,
 	)
 
-	fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp = interact(
+	visdata = interact(
 		T4(), fibers, -1+0.0im,
 		(-3,3,-1,1),(-4,4,-3,3);
 		vertical = true
 	)
-	display(fig)
+	display(visdata[:fig])
 
-	return fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp
+	return visdata
 end

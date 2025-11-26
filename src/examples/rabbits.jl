@@ -22,11 +22,12 @@ function interact_rabbits()
 		:dd => 0.0 - 0.9im,
 	)
 	fp = -0.3 + 0.4im
-	fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp = interact(
+	visdata = interact(
 		rabbit(rabbit(rabbit)),
 		fibers, fp,
 		(-1.5,1.5,-1.5,1.5),(-1.0,0.5,-0.5,1.0); vertical=true
 	)
-	display(fig)
-	return fig, ax_lift, ax_base, ax_braid, bps, xpps, tpp
+	display(visdata[:fig])
+
+	return visdata
 end
