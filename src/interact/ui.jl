@@ -57,10 +57,10 @@ function _standard_ui()
 	# 12 column layout
 	panel_grid = contents(fig[1,1])[1]
 
-	btn_smooth = Button(panel_grid[2,2:3], label="Smooth", width=5em, buttoncolor=_COLORS[:red][:dark])
+	btn_smooth = Button(panel_grid[2,2:3], label="Smooth", width=5em)
 	btn_close = Button(panel_grid[2,6:7], label="Close", width=5em)
 	btn_lift = Button(panel_grid[2,10:11], label="Lift", width=5em)
-	tog_smooth = Toggle(panel_grid[3,2:3], framecolor_active=_COLORS[:red][:dark])
+	tog_smooth = Toggle(panel_grid[3,2:3], active=false)
 	tog_close = Toggle(panel_grid[3,6:7])
 	tog_lift = Toggle(panel_grid[3,10:11])
 	lbl_togs = Label(panel_grid[4,1:12], "Toggle automatic smoothing/closing\nand animated lifting.")
@@ -84,7 +84,7 @@ function _standard_ui()
 
 
 
-	hc = HideableColumn(fig, 1, Auto(true,1), true,
+	hc = HideableColumn(fig, 1, Fixed(280), true,
 		[
 			btn_smooth,
 			btn_close,
@@ -122,6 +122,7 @@ function _standard_ui()
 		colgap!(panel_grid, c, 0)
 	end
 
+	colsize!(fig.layout, 1, Fixed(280))
 	colsize!(fig.layout, 2, Auto(1))
 	colsize!(fig.layout, 3, Auto(2))
 

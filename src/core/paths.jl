@@ -23,7 +23,7 @@ Base.iterate(P::ComplexPath, n=1) = n > length(P) ? nothing : (P.elements[n], n+
 Base.length(P::ComplexPath) = length(P.elements)
 Base.lastindex(P::ComplexPath) = lastindex(P.elements)
 Base.getindex(P::ComplexPath, i::Int) = P.elements[i]
-Base.getindex(P::ComplexPath, u::UnitRange{Int64}) = P.elements[u.start:u.stop]
+Base.getindex(P::ComplexPath, u::UnitRange{Int64}) = ComplexPath(P.elements[u.start:u.stop])
 Base.setindex!(P::ComplexPath, p, i::Int) = P.elements[i] = p
 Base.push!(P::ComplexPath, p) = begin push!(P.elements, p); P end
 Base.reverse(P::ComplexPath) = ComplexPath(reverse(copy(P.elements)))
@@ -134,4 +134,30 @@ end
 
 function piecewiselinear(x₀::ComplexF64, x₁::ComplexF64, dz::Float64)::ComplexPath
 	piecewiselinear([x₀, x₁], dz)
+end
+
+function piecewiselinear(P::ComplexPath, dz::Float64)::ComplexPath
+	piecewiselinear(P.elements,dz)
+end
+
+"""
+	smooth(zp::ComplexPath, method::Symbol)::ComplexPath
+
+Options for smoothing paths. At present, just one.
+"""
+function smooth(zp::ComplexPath, method::Symbol)::ComplexPath
+	if method == :chaikin
+		n = length(zp)
+		v = Vector{ComplexF64}(undef, 2n)
+		v[1] = zp[1]
+		v[end] = zp[end]
+
+		for i in 1:(n-1)
+			v[2i] = zp[i]*0.75 + zp[i+1]*0.25
+			v[2i + 1] = zp[i]*0.25 + zp[i+1]*0.75
+		end
+
+		return ComplexPath(v)
+	end
+	return zp
 end

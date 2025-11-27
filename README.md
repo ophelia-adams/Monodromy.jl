@@ -24,18 +24,19 @@ You will see a window with three plots: the lift and base on the left, and a 3D 
 
 Mouse controls:
 
-- right click: clear plot (lift or base)
-- middle click / option click on base: animated retrace of the current path
-- shift + middle click / option click on base: instant retrace of the current path
-- scroll: zoom in or out
-- right click + drag: pan around (be careful not to clear! this binding will likely change to shift+left)
+- MB3: clear plot (lift or base)
+- MB2 / MB1+Opt: animated retrace of the current path
+- MB2+Shift / MB1+Opt+Shift: instant retrace of the current path
+- Scroll: zoom in or out
+- MB2-drag: pan around (be careful not to clear! this binding will likely change to shift+left)
 
 Panel controls:
 
-- paths close automatically by default
-- lift will animate by default
-- get permutation will report its best guess at the permutation for your current path; this wil likely error if it is not a loop
-- red buttons do not function right now, but will one day
+- Smooth: if your paths look rough, you can smooth them and optionally toggle on automatic smoothing. Usually this doesn't actually make the lift better.
+- Close: paths close automatically by default.
+- Lift: animated by default, button is alternative to mouse.
+- Get Permutation: reports its best guess at the permutation for your current path. It will likely error if it is not a loop.
+- Red Buttons: not function right now, but will one day.
 
 # Quick guide
 
@@ -97,7 +98,6 @@ Suggestions welcome. Most of the very small interface tweaks will be finished so
 
 	- Integrate with `GAP.jl` to calculate and name the groups (when small).
 	- Better algorithms and implementations.
-	- Path smoothing.
 
 ## Technical
 
@@ -111,5 +111,4 @@ Most of these will have a button or hotkey associated. The current controls are 
 
 	- Saving paths (see above).
 	- Undo/redo.
-	- Smoothing (see above).
 	- Hide interface and export animation.

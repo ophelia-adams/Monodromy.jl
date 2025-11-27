@@ -65,11 +65,8 @@ function interact(
 
 	bp = branchplot!(ax_base, f)
 
-	tpp = pathplot!(ax_base, t; name=:base)
+	tpp = pathplot!(ax_base, ComplexPath(t); name=:base)
 	tpp.hovercolor[] = tpp.regcolor[]
-	register_path_draw!(ax_base, tpp)
-	register_path_close!(ax_base, tpp)
-	register_repeat!(ax_base, tpp)
 
 	xpps = Dict{Symbol,PathPlot}()
 	bps = Dict{Symbol,BraidPlot}()
@@ -78,19 +75,17 @@ function interact(
 		bps[name] = braidpathplot!(ax_braid, xpps[name])
 	end
 
-	on(buttons[:clear].clicks) do _
-		reset_path!(tpp)
-		reset_path!.(values(xpps))
-	end
+	# cleanup, aligns braids
+	reset_path!(tpp)
+	reset_path!.(values(xpps))
 
-	on(buttons[:permutation].clicks) do _
-		perm = Dict{Symbol,Symbol}()
-		for name in keys(fibers)
-			x = fibers[name]
-			y = head(xpps[name].zpath[])
-			perm[name] = findnearest(fibers,y)
-		end
-		setproperty!(labels[:permutation], :text, cyclestring(Permutation(perm)))
+	register_path_draw!(ax_base, tpp)
+	register_path_close!(ax_base, tpp)
+	register_repeat!(ax_base, tpp)
+	register_path_smooth!(ax_base, xpps, tpp)
+
+	on(buttons[:smooth].clicks) do _
+		_smooth(xpps, tpp)
 	end
 
 	on(buttons[:close].clicks) do _
@@ -101,12 +96,37 @@ function interact(
 		repeat_draw!(tpp; animate=toggles[:lift].active[])
 	end
 
+	on(toggles[:smooth].active) do enable
+		if enable
+			activate_interaction!(ax_base, :path_smooth)
+		else
+			deactivate_interaction!(ax_base, :path_smooth)
+		end
+	end
+
 	on(toggles[:close].active) do enable
 		if enable
 			activate_interaction!(ax_base, :path_close)
 		else
 			deactivate_interaction!(ax_base, :path_close)
 		end
+	end
+
+	on(buttons[:permutation].clicks) do _
+		perm = Dict{Symbol,Symbol}()
+		for name in keys(fibers)
+			x = fibers[name]
+			y = head(xpps[name].zpath[])
+			perm[name] = findnearest(fibers,y)
+		end
+		setproperty!(labels[:permutation], :text,
+			cyclestring(Permutation(perm))
+		)
+	end
+
+	on(buttons[:clear].clicks) do _
+		reset_path!(tpp)
+		reset_path!.(values(xpps))
 	end
 
 	return (fig=fig, ax_lift=ax_lift, ax_base=ax_base, ax_braid=ax_braid, braid_pathplots=bps, lift_pathplots=xpps, base_pathplot=tpp)
@@ -201,6 +221,20 @@ function register_path_close!(ax::Axis, pp::PathPlot)
 end
 
 """
+	register_path_smooth!(ax::Axis, xpps::Dict{Symbol,PathPlot}, tpp::PathPlot)
+
+On left drag release, smooths the path and recalculates the lift
+"""
+function register_path_smooth!(ax::Axis, xpps::Dict{Symbol,PathPlot}, tpp::PathPlot)
+	register_interaction!(ax, :path_smooth) do event::MouseEvent, axis
+		if event.type === MouseEventTypes.leftdragstop
+			_smooth(xpps, tpp)
+		end
+	end
+	deactivate_interaction!(ax, :path_smooth)
+end
+
+"""
 On middle click, retrace the path. If shift is held, it does this instantly, but otherwise it animates it.
 """
 function register_repeat!(ax::Axis, tpp::PathPlot)
@@ -255,5 +289,21 @@ function _close(pp::PathPlot)
 	closing = piecewiselinear(zp[end],zp[1],0.1)
 	for c in closing
 		pp.zpath[] = push!(zp, c)
+	end
+end
+
+function _smooth(xpps::Dict{Symbol,PathPlot}, tpp::PathPlot)
+	n = length(tpp.zpath[])
+	szp = smooth(tpp.zpath[], :chaikin)[2:end]
+	for pp in values(xpps)
+		if length(pp.zpath[]) > n - 1
+			pp.zpath[] = pp.zpath[][1:(end - n + 1)]
+		else
+			reset_path!(pp)
+		end
+	end
+	tpp.zpath.value[] = ComplexPath([tpp.zpath[][1]])
+	for s in szp
+		tpp.zpath[] = push!(tpp.zpath[],s)
 	end
 end
