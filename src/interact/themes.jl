@@ -87,7 +87,7 @@ const _OPPOSITE = Dict(
 	:green => :red,
 )
 
-function OAPlain(;base=:blue, em=12)
+function OAPlain(;base=:blue, em=16)
 
 if !haskey(_COLORS, base)
 	@warn "Unknown color :$base, defaulting to :blue"
@@ -152,7 +152,7 @@ return Theme(
 		active = true,
 		buttoncolor = _COLORS[base][:dark],
 		framecolor_active = _COLORS[base][:medium],
-		framecolor_inactive = _COLORS[base][:light],
+		framecolor_inactive = _COLORS[base][:medium],
 	),
 	PathPlot = (
 		emphcolor = _COLORS[base][:highlight],

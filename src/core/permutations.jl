@@ -75,6 +75,25 @@ function cycles(p::Permutation)::Vector{Vector{Symbol}}
 end
 
 """
+	cyclestring(p::Permutation)
+
+Returns a string with the decomposition of `p` into disjoint cycles.
+"""
+function cyclestring(p::Permutation)
+	cycs = cycles(p)
+	s = " "
+	for c in cycs
+		if length(c) > 1
+			s = s*"( "
+			s = s*prod([string(l)*", " for l in c[1:end-1]])
+			s = s*string(c[end])*" ) "
+		end
+	end
+	s = s == " " ? "id" : s[2:end-1]
+	return s
+end
+
+"""
 	inverse(p::Permutation)::Permutation
 
 Returns the inverse of a permutation; this is already part of the `Permutation` struct because it has to be calculated during the validation anywa.

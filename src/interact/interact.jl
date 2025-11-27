@@ -49,14 +49,15 @@ display(visdata[:fig])
 """
 function interact(
 	f::ComplexEtaleCover,
-	fibs::Dict{Symbol,ComplexF64},
+	fibers::Dict{Symbol,ComplexF64},
 	t::ComplexF64,
 	limits_lift::NTuple{4, S},
 	limits_base::NTuple{4, T};
 	layout=:standard
 ) where {S<:Number,T<:Number}
 
-	fig, ax_lift, ax_base, ax_braid = _standard_ui()
+	fig, axes, buttons, toggles, textboxes, labels = _standard_ui()
+	ax_lift, ax_base, ax_braid = axes[:lift], axes[:base], axes[:braid]
 
 	setproperty!(ax_lift, :limits, limits_lift)
 	setproperty!(ax_base, :limits, limits_base)
@@ -67,13 +68,45 @@ function interact(
 	tpp = pathplot!(ax_base, t; name=:base)
 	tpp.hovercolor[] = tpp.regcolor[]
 	register_path_draw!(ax_base, tpp)
+	register_path_close!(ax_base, tpp)
 	register_repeat!(ax_base, tpp)
 
 	xpps = Dict{Symbol,PathPlot}()
 	bps = Dict{Symbol,BraidPlot}()
-	for name in keys(fibs)
-		xpps[name] = liftpathplot!(ax_lift, f, fibs[name], tpp, name)
+	for name in keys(fibers)
+		xpps[name] = liftpathplot!(ax_lift, f, fibers[name], tpp, name)
 		bps[name] = braidpathplot!(ax_braid, xpps[name])
+	end
+
+	on(buttons[:clear].clicks) do _
+		reset_path!(tpp)
+		reset_path!.(values(xpps))
+	end
+
+	on(buttons[:permutation].clicks) do _
+		perm = Dict{Symbol,Symbol}()
+		for name in keys(fibers)
+			x = fibers[name]
+			y = head(xpps[name].zpath[])
+			perm[name] = findnearest(fibers,y)
+		end
+		setproperty!(labels[:permutation], :text, cyclestring(Permutation(perm)))
+	end
+
+	on(buttons[:close].clicks) do _
+		_close(tpp)
+	end
+
+	on(buttons[:lift].clicks) do _
+		repeat_draw!(tpp; animate=toggles[:lift].active[])
+	end
+
+	on(toggles[:close].active) do enable
+		if enable
+			activate_interaction!(ax_base, :path_close)
+		else
+			deactivate_interaction!(ax_base, :path_close)
+		end
 	end
 
 	return (fig=fig, ax_lift=ax_lift, ax_base=ax_base, ax_braid=ax_braid, braid_pathplots=bps, lift_pathplots=xpps, base_pathplot=tpp)
@@ -90,7 +123,7 @@ Makes a reactive lift of a path in the base. Requiring a name allows it to be de
 function liftpathplot!(ax::Axis, f::ComplexEtaleCover, z::ComplexF64, tpp::PathPlot, name::Symbol)
 	xpp = pathplot!(ax, z; name=name, linear=true)
 
-	register_reset!(ax, xpp)
+	register_path_reset!(ax, xpp)
 
 	on(tpp.zpath) do zp
 		x₁ = monodromy_step(f, xpp.zpath[][end], zp[end-1], zp[end])
@@ -133,7 +166,7 @@ end
 Captures left clicks and drags, handing them to the PathPlot to be drawn.
 """
 function register_path_draw!(ax::Axis, pp::PathPlot)
-	register_reset!(ax, pp)
+	register_path_reset!(ax, pp)
 	register_interaction!(ax,:path_draw) do event::MouseEvent, axis
 		simulated_mc = ispressed(ax, Keyboard.left_alt)
 		if (event.type === MouseEventTypes.leftdrag || event.type === MouseEventTypes.leftclick) && !simulated_mc
@@ -146,13 +179,23 @@ end
 """
 On right click, reset the path plot to the one-point path at its currently emphasized point.
 """
-function register_reset!(ax::Axis, pp::PathPlot)
+function register_path_reset!(ax::Axis, pp::PathPlot)
 	register_interaction!(ax, Symbol(:path_clear,pp.name[])) do event::MouseEvent, axis
 		if event.type === MouseEventTypes.rightclick
-			# a notified update, which requires two points
-			pp.zpath[] = ComplexPath([pp.zpath[][end], pp.zpath[][end]])
-			# then a silent change to one point (ready for input)
-			pp.zpath.value[] = ComplexPath([pp.zpath[][end]])
+			reset_path!(pp)
+		end
+	end
+end
+
+"""
+	register_path_close!(ax::Axis, pp::PathPlot)
+
+On left drag release, closes the path by a `piecewiselinear` with `dz=0.1`.
+"""
+function register_path_close!(ax::Axis, pp::PathPlot)
+	register_interaction!(ax, :path_close) do event::MouseEvent, axis
+		if event.type === MouseEventTypes.leftdragstop
+			_close(pp)
 		end
 	end
 end
@@ -192,5 +235,25 @@ function repeat_draw!(tpp::PathPlot; animate=false)
 		else
 			tpp.zpath[] = push!(tpp.zpath[],L[i])
 		end
+	end
+end
+
+"""
+	reset_path!(pp::PathPlot)
+
+Clears a `PathPlot`, leaving only its currently emphasized point.
+"""
+function reset_path!(pp::PathPlot)
+	# a notified update, for the redraw, but it requires two points in case someone is watching
+	pp.zpath[] = ComplexPath([pp.zpath[][1], pp.zpath[][1]])
+	# silent change to one point (ready for input)
+	pp.zpath.value[] = ComplexPath([pp.zpath[][1]])
+end
+
+function _close(pp::PathPlot)
+	zp = pp.zpath[]
+	closing = piecewiselinear(zp[end],zp[1],0.1)
+	for c in closing
+		pp.zpath[] = push!(zp, c)
 	end
 end

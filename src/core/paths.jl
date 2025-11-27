@@ -131,3 +131,7 @@ function piecewiselinear(vertices::Vector{ComplexF64}, dz::Float64)::ComplexPath
 
 	return ComplexPath(P)
 end
+
+function piecewiselinear(x₀::ComplexF64, x₁::ComplexF64, dz::Float64)::ComplexPath
+	piecewiselinear([x₀, x₁], dz)
+end

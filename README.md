@@ -21,13 +21,21 @@ interact_symmetric_seven()
 
 You will see a window with three plots: the lift and base on the left, and a 3D plot on the right. You can draw paths on the base plot with your mouse, and they will be lifted to the provided fibers. At the same time, the 3D plot will show those paths plotted against time, so you can see how they braid.
 
-Other controls:
+
+Mouse controls:
 
 - right click: clear plot (lift or base)
 - middle click / option click on base: animated retrace of the current path
 - shift + middle click / option click on base: instant retrace of the current path
 - scroll: zoom in or out
 - right click + drag: pan around (be careful not to clear! this binding will likely change to shift+left)
+
+Panel controls:
+
+- paths close automatically by default
+- lift will animate by default
+- get permutation will report its best guess at the permutation for your current path; this wil likely error if it is not a loop
+- red buttons do not function right now, but will one day
 
 # Quick guide
 
@@ -104,5 +112,4 @@ Most of these will have a button or hotkey associated. The current controls are 
 	- Saving paths (see above).
 	- Undo/redo.
 	- Smoothing (see above).
-	- Close paths to loops; button or hotkey, and perhaps a toggle for automatically doing this after dragging.
 	- Hide interface and export animation.

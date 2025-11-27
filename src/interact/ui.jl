@@ -27,13 +27,13 @@ end
 """
 	_standard_ui()
 
-Assembles the standard UI for the tool, with a collapsable side panel. The panel layout is a 12 column grid. Currently, none of its buttons are functional and so it is hidden by default.
+Assembles the standard UI for the tool, with a collapsable side panel. The panel layout is a 12 column grid (forget where I saw this, I think it's a common web dev thing).
 """
 function _standard_ui()
-	em = 12
+	em = 16
 	fig = Figure(;
 		figure_padding = (0,20,20,20),
-		size = (1000,800)
+		size = (1300,1000)
 	)
 	DataInspector(fig)
 
@@ -57,13 +57,13 @@ function _standard_ui()
 	# 12 column layout
 	panel_grid = contents(fig[1,1])[1]
 
-	btn_smooth = Button(panel_grid[2,2:3], label="Smooth", width=4em)
-	btn_close = Button(panel_grid[2,6:7], label="Close", width=4em)
-	btn_lift = Button(panel_grid[2,10:11], label="Lift", width=4em)
-	tog_smooth = Toggle(panel_grid[3,2:3])
+	btn_smooth = Button(panel_grid[2,2:3], label="Smooth", width=5em, buttoncolor=_COLORS[:red][:dark])
+	btn_close = Button(panel_grid[2,6:7], label="Close", width=5em)
+	btn_lift = Button(panel_grid[2,10:11], label="Lift", width=5em)
+	tog_smooth = Toggle(panel_grid[3,2:3], framecolor_active=_COLORS[:red][:dark])
 	tog_close = Toggle(panel_grid[3,6:7])
 	tog_lift = Toggle(panel_grid[3,10:11])
-	lbl_togs = Label(panel_grid[4,1:12], "Toggle automatic smoothing/closing/lifting.")
+	lbl_togs = Label(panel_grid[4,1:12], "Toggle automatic smoothing/closing\nand animated lifting.")
 
 	#Box(panel_grid[4,1:3])
 
@@ -72,19 +72,19 @@ function _standard_ui()
 
 	#Box(panel_grid[7,1:3])
 
-	btn_undo = Button(panel_grid[9,2:3], label="↺ undo")
-	btn_redo = Button(panel_grid[9,6:7], label="↻ redo")
+	btn_undo = Button(panel_grid[9,2:3], label="↺ undo", buttoncolor=_COLORS[:red][:dark])
+	btn_redo = Button(panel_grid[9,6:7], label="↻ redo", buttoncolor=_COLORS[:red][:dark])
 	btn_clear = Button(panel_grid[9,10:11], label="✕ clear")
 
 	#Box(panel_grid[9,1:3])
 
 	txt_save = Textbox(panel_grid[11,1:12], placeholder="location", width = Relative(0.9))
-	btn_save = Button(panel_grid[12,1:6], label="✎ save")
-	btn_load = Button(panel_grid[12,7:12], label="⎘ load")
+	btn_save = Button(panel_grid[12,1:6], label="✎ save", buttoncolor=_COLORS[:red][:dark])
+	btn_load = Button(panel_grid[12,7:12], label="⎘ load", buttoncolor=_COLORS[:red][:dark])
 
 
 
-	hc = HideableColumn(fig, 1, Auto(true,0.3), true,
+	hc = HideableColumn(fig, 1, Auto(true,1), true,
 		[
 			btn_smooth,
 			btn_close,
@@ -122,10 +122,39 @@ function _standard_ui()
 		colgap!(panel_grid, c, 0)
 	end
 
-	colsize!(fig.layout, 2, Auto(0.25))
-	colsize!(fig.layout, 3, Auto(0.7))
+	colsize!(fig.layout, 2, Auto(1))
+	colsize!(fig.layout, 3, Auto(2))
 
-	hide!(hc)
+	axes = Dict(
+		:lift => axis_lift,
+		:base => axis_base,
+		:braid => axis_braid,
+	)
+	buttons = Dict(
+		:smooth => btn_smooth,
+		:close => btn_close,
+		:lift => btn_lift,
+		:permutation => btn_permutation,
+		:undo => btn_undo,
+		:redo => btn_redo,
+		:clear => btn_clear,
+		:save => btn_save,
+		:load => btn_load,
+	)
 
-	return fig, axis_lift, axis_base, axis_braid
+	toggles = Dict(
+		:smooth => tog_smooth,
+		:close => tog_close,
+		:lift => tog_lift,
+	)
+
+	textboxes = Dict(
+		:save => txt_save,
+	)
+
+	labels = Dict(
+		:permutation => lbl_permutation,
+	)
+
+	return fig, axes, buttons, toggles, textboxes, labels
 end
