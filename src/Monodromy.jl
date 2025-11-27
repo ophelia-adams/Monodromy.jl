@@ -17,6 +17,7 @@ module Monodromy
 
 	include("interact/themes.jl")
 	include("interact/recipes.jl")
+	include("interact/ui.jl")
 	include("interact/interact.jl")
 
 	include("examples/chebyshev.jl")
@@ -67,8 +68,6 @@ module Monodromy
 	export interact_chebyshev
 	export interact_rabbits
 	export interact_symmetric_seven
-
-	export findnearest
 
 	function __init__()
 		set_theme!(OAPlain())

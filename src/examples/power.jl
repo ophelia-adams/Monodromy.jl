@@ -23,7 +23,7 @@ end
 """
 Play around with the powering map!
 """
-function interact_power(; degree=3, x=1.0+0.0im, vertical=false)
+function interact_power(; degree=3, x=1.0+0.0im)
 	f = Power(degree)
 	visdata = interact(
 		f, x,

@@ -122,20 +122,37 @@ return Theme(
 		yticksmirrored = true,
 	),
 	Button = (
-		cornerradius = 0,
+		tellwidth = false,
+		tellheight = false,
+		cornerradius = 4,
 		buttoncolor = _COLORS[base][:medium],
 		buttoncolor_active = _COLORS[base][:highlight],
 		buttoncolor_hover = _COLORS[base][:highlight],
 		labelcolor = _COLORS[:black],
 		labelcolor_active = _COLORS[:white],
 		labelcolor_hover = _COLORS[:white],
-		strokecolor = _COLORS[base][:dark]
+		strokecolor = _COLORS[base][:light],
+	),
+	Label = (
+		tellwidth = false,
+		tellheight = false,
+	),
+	Textbox = (
+		tellwidth = false,
+		tellheight = false,
+		bordercolor= _COLORS[base][:dark],
+		bordercolor_focused = _COLORS[base][:dark],
+		bordercolor_focused_invalid = _COLORS[base][:dark],
+		bordercolor_hover = _COLORS[base][:dark],
+		textcolor_placeholder = _COLORS[base][:medium],
 	),
 	Toggle = (
+		tellwidth = false,
+		tellheight = false,
 		active = true,
 		buttoncolor = _COLORS[base][:dark],
 		framecolor_active = _COLORS[base][:medium],
-		framecolor_inactive = _COLORS[base][:light]
+		framecolor_inactive = _COLORS[base][:light],
 	),
 	PathPlot = (
 		emphcolor = _COLORS[base][:highlight],

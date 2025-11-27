@@ -38,8 +38,7 @@ function interact_symmetric_seven()
 	visdata = interact(
 		symmetric_seven(),
 		fibers, base,
-		(-5,5,-5,5),(-2,2,-2,2);
-		vertical=true
+		(-5,5,-5,5),(-2,2,-2,2)
 	)
 
 	display(visdata[:fig])

@@ -4,7 +4,7 @@
 			 t::ComplexF64,
 			 limits_lift::NTuple{4, S},
 			 limits_base::NTuple{4, T};
-			 vertical=true)
+			 layout = :standard)
 
 Create an interactive visualization of the monodromy of a branched cover.
 
@@ -14,14 +14,14 @@ Create an interactive visualization of the monodromy of a branched cover.
 - `t`: Base point
 - `limits_lift`: (xmin, xmax, ymin, ymax)
 - `limits_base`: (xmin, xmax, ymin, ymax)
-- `vertical`: Layout orientation
+- `layout`: Layout; only `:standard` is available for now.
 
 # Returns
 A tuple containing:
 - `fig`: The Figure
 - `ax_lift`: Axis showing the covering space (domain)
 - `ax_base`: Axis showing the base space (codomain)
-- `as_braid`: 3D axis showing braiding
+- `ax_braid`: 3D axis showing braiding
 - `bps`: Dictionary of BraidPlots (one per fiber)
 - `xpps`: Dictionary of PathPlots
 - `tpp`: PathPlot of the base
@@ -38,12 +38,13 @@ Lifts are automatically calculated as you draw in the base.
 ```julia
 f = Power(3)
 fibers = Dict(:one => 1.0, :azeta => exp(2πim/3), :bzeta => exp(4πim/3))
-fig, ax_lift, ax_base, ax3, bps, xpps, tpp = interact(
+visdata = interact(
 	f, 1.0 + 0.0im, fibers,
 	(-2, 2, -2, 2),
 	(-2, 2, -2, 2);
-	vertical = true
+	layout = standard
 )
+display(visdata[:fig])
 ```
 """
 function interact(
@@ -52,33 +53,14 @@ function interact(
 	t::ComplexF64,
 	limits_lift::NTuple{4, S},
 	limits_base::NTuple{4, T};
-	vertical=true
+	layout=:standard
 ) where {S<:Number,T<:Number}
 
-	fig = Figure(size=(1000,800))
-	DataInspector(fig)
+	fig, ax_lift, ax_base, ax_braid = _standard_ui()
 
-	base_loc = vertical ? [2,1] : [1,2]
-	braid_loc = vertical ? [1:2,2] : [1, 3]
-
-	ax_lift = CleanAxis(
-		fig[1,1],
-		aspect = 1,
-		limits=limits_lift,
-		title="lift"
-	)
-	ax_base = CleanAxis(
-		fig[base_loc...],
-		aspect = 1,
-		limits=limits_base,
-		title="base"
-	)
-	ax_braid = Axis3(fig[braid_loc...],limits=(limits_lift...,0,1))
-
-	if vertical
-		colsize!(fig.layout,1,Relative(0.27))
-		colsize!(fig.layout,2,Relative(0.72))
-	end
+	setproperty!(ax_lift, :limits, limits_lift)
+	setproperty!(ax_base, :limits, limits_base)
+	setproperty!(ax_braid, :limits, (limits_lift...,0,1))
 
 	bp = branchplot!(ax_base, f)
 
@@ -97,7 +79,7 @@ function interact(
 	return (fig=fig, ax_lift=ax_lift, ax_base=ax_base, ax_braid=ax_braid, braid_pathplots=bps, lift_pathplots=xpps, base_pathplot=tpp)
 end
 
-interact(f::ComplexEtaleCover, x::ComplexF64, ll, lb; vertical=false) = interact(f, Dict(:fiber => x), f(x), ll, lb; vertical=vertical)
+interact(f::ComplexEtaleCover, x::ComplexF64, ll, lb; layout=:standard) = interact(f, Dict(:fiber => x), f(x), ll, lb; layout=layout)
 
 
 """
@@ -140,7 +122,7 @@ Returns an 2D axis with two interactions removed:
 - rectangle zoom: annoying
 - limitreset: issue on macs and conflicts with other interactions.
 """
-function CleanAxis(GP::GridPosition, args...; kwargs...)::Axis
+function CleanAxis(GP::Union{GridPosition,GridSubposition}, args...; kwargs...)::Axis
 	axis = Axis(GP, args...; kwargs...)
 	deregister_interaction!(axis,:rectanglezoom)
 	deregister_interaction!(axis,:limitreset)

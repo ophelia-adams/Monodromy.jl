@@ -25,7 +25,7 @@ function interact_rabbits()
 	visdata = interact(
 		rabbit(rabbit(rabbit)),
 		fibers, fp,
-		(-1.5,1.5,-1.5,1.5),(-1.0,0.5,-0.5,1.0); vertical=true
+		(-1.5,1.5,-1.5,1.5),(-1.0,0.5,-0.5,1.0)
 	)
 	display(visdata[:fig])
 
