@@ -77,6 +77,8 @@
 	end
 
 	@testset "findnearest" begin
+		import Monodromy: findnearest
+
 		fiber = Dict(
 			:a => 1.0+0.0im,
 			:b => 2.0+0.0im,

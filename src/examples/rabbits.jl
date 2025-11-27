@@ -12,16 +12,16 @@ end
 function interact_rabbits()
 	rabbit = rabbit_cover()
 	fibers = Dict(
-		:a => -1.2 + 0.6im,
-		:b => -0.9 + 0.7im,
-		:c => -0.3 + 0.4im,
-		:d =>  0.0 + 0.9im,
-		:aa => 1.2 - 0.6im,
-		:bb => 0.9 - 0.7im,
-		:cc => 0.3 - 0.4im,
-		:dd => 0.0 - 0.9im,
+		:a => -1.18 +  0.6im,
+		:b => -0.92 + 0.67im,
+		:c => -0.28 + 0.48im,
+		:d => -0.04 + 0.89im,
+		:aa => 1.18 -  0.6im,
+		:bb => 0.92 - 0.67im,
+		:cc => 0.28 - 0.48im,
+		:dd => 0.04 - 0.89im,
 	)
-	fp = -0.3 + 0.4im
+	fp = -0.28 + 0.48im
 	visdata = interact(
 		rabbit(rabbit(rabbit)),
 		fibers, fp,

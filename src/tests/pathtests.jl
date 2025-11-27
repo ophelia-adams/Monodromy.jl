@@ -31,7 +31,7 @@
 		@test p[1] == 1.0+0.0im
 		@test p[2] == 2.0+1.0im
 		@test p[end] == 3.0+2.0im
-		@test p[1:2] == [1.0+0.0im, 2.0+1.0im]
+		@test p[1:2].elements == [1.0+0.0im, 2.0+1.0im]
 
 		# comprehension
 		collected = [z for z in p]
