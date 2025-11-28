@@ -1,3 +1,5 @@
+<p align="center"><img src="media/rabbit_hidden_panel.png" alt="drawing" style="width:700px; align: center;"/></p>
+
 # Description
 
 Small interactive tool for visualizing monodromy and numerically calculating the monodromy action. The interface is all written with [GLMakie.jl](https://github.com/MakieOrg/Makie.jl).
@@ -56,7 +58,6 @@ To experiment with it, call `interact` and provide:
 - the actual base point
 - limits for the lift plot
 - limits for the base plot
-- optionally, request a horizontal layout
 
 The names are used as symbols when representing the permutation, and for display on the plot.
 
@@ -75,9 +76,9 @@ If you don't have fibers or a base in mind, you can instead give it just one poi
 A rough heuristic for deciding the limits:
 
 - Base limits should make all branch points visible, perhaps roughly centered around them, with some room for drawing
-- If the degree is $d$, then the lift axes should be roughly a $d$th root of the base axes. When the map takes the real line to itself, lifts tend to flatten toward it too.
+- If the degree is $d$, then the lifted axis dimensions should be roughly a $d$ th root of the base axis dimensions. When the map takes the real line to itself, lifts tend to flatten toward the axis.
 
-Usually you'll want to tweak them after drawing your first paths (or while determining your fibers).
+Usually you'll want to tweak the limits after drawing your first paths (or while determining your fibers).
 
 # Long guide
 
@@ -87,7 +88,7 @@ Almost all the current functions are documented. Reading the examples shows you 
 - `lollipop` in `paths.jl`: returns a "lollipop" shaped path from one point around another by attaching two lines and a circle of specified radius.
 - `monodromy_permutation` in `lifting.jl`: returns the permutation associated to a loop's action on named fibers.
 
-Note that my groups all act from the right, so that $g \in G$ acting on $x \in X$ is as $x^g$ rather than $g(x)$.
+Note that my groups all act from the right, so that $g \in G$ acting on $x \in X$ is $x^g$ rather than $g(x)$.
 
 
 # Planned features
@@ -101,7 +102,7 @@ Suggestions welcome. Most of the very small interface tweaks will be finished so
 
 ## Technical
 
-	- Saving and loading paths to files, or to a provided dictionary variable for easier REPL access.
+	- Saving and loading paths to files.
 	- Split off the interactivity into an extension or separate package to reduce load time when not using them.
 	- More "safety" features like checking that fibers are, in fact, fibers.
 
@@ -112,3 +113,5 @@ Most of these will have a button or hotkey associated. The current controls are 
 	- Saving paths (see above).
 	- Undo/redo.
 	- Hide interface and export animation.
+	- Record new fiber.
+	- Menu with some standard maps? or allow input? (I removed this a while ago)
