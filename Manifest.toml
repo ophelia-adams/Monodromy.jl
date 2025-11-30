@@ -2,7 +2,7 @@
 
 julia_version = "1.12.2"
 manifest_format = "2.0"
-project_hash = "ad51fb5759d593ef275f130ef467fdeea66f046e"
+project_hash = "589e257714e536e27040369eddce5ee407608963"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -863,7 +863,7 @@ uuid = "66fc600b-dfda-50eb-8b99-91cfa97b1301"
 version = "1.1.8"
 
 [[deps.Monodromy]]
-deps = ["GLMakie", "Test"]
+deps = ["GLMakie", "Makie", "Test"]
 path = "."
 uuid = "c42699b3-6a89-4f27-9b41-93396bab36cf"
 version = "0.1.0"

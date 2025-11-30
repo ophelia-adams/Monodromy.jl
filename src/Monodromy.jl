@@ -8,6 +8,7 @@ See `interact_rabbits()` or the other `interact_*()` functions to get started.
 """
 module Monodromy
 	using GLMakie
+	using Serialization
 
 	include("core/types.jl")
 	include("core/paths.jl")
@@ -19,6 +20,7 @@ module Monodromy
 	include("interact/recipes.jl")
 	include("interact/ui.jl")
 	include("interact/interact.jl")
+	include("interact/save.jl")
 
 	include("examples/chebyshev.jl")
 	include("examples/exponential.jl")

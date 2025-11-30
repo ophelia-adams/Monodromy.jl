@@ -10,7 +10,7 @@
 Carries out one step of path lifting from `x₀` to `x₁` above `t₀` to `t₁`.
 This implementation just does one step of Euler's method:
 	x₁ ≈ x₀ + Δt/f'(x₀),
-followed by the specified number of Newton's method steps, solving
+followed by the specified number of Newton's method steps for solving
 	f(z) = t₁
 starting from the guess for `x₁` above, as path correction.
 """
@@ -47,9 +47,46 @@ function monodromy(
 	corrector_steps::Int64=2
 )::ComplexF64
 	for k in 2:length(path)
-		x = monodromy_step(f, x, path[k-1], path[k]; corrector_steps=corrector_steps)
+		x = monodromy_step(f, x, path[k-1], path[k];
+			corrector_steps=corrector_steps)
 	end
 	return x
+end
+
+"""
+	monodromy(f::ComplexEtaleCover,
+		X::Vector{ComplexF64},
+		path::ComplexPath;
+		corrector_steps::Int64
+	)::ComplexF64
+
+Lift a path `P` over each `x` in `X` and return the endpoints. Spreads the calculation across some threads; basically speeds it up by a factor of the number of threads available when the degree is large enough.
+"""
+function monodromy(
+	f::ComplexEtaleCover,
+	X::Vector{ComplexF64},
+	path::ComplexPath;
+	corrector_steps::Int64=2
+)::Vector{ComplexF64}
+	X = copy(X)
+	Threads.@threads for i in length(X)
+		X[i] = monodromy(f,X[i],path;
+			corrector_steps=corrector_steps)
+	end
+	return X
+end
+function monodromy(
+	f::ComplexEtaleCover,
+	X::Dict{Symbol,ComplexF64},
+	path::ComplexPath;
+	corrector_steps::Int64=2
+)::Dict{Symbol,ComplexF64}
+	X = copy(X)
+	Threads.@threads for k in collect(keys(X))
+		X[k] = monodromy(f,X[k],path;
+			corrector_steps=corrector_steps)
+	end
+	return X
 end
 
 """
@@ -77,6 +114,46 @@ function lift(
 	return L
 end
 
+
+"""
+	lift(
+		f::ComplexEtaleCover{X,Y},
+		X::Vector{ComplexF64},
+		path::ComplexPath;
+		corrector_steps=2
+	)::ComplexPath
+
+Lifts a path over multiple fibers.
+"""
+function lift(
+	f::ComplexEtaleCover,
+	X::Vector{ComplexF64},
+	path::ComplexPath;
+	corrector_steps=2
+)::Vector{ComplexPath}
+	n = length(X)
+	N = length(path)
+	L = Vector{ComplexPath}(undef, n)
+	Threads.@threads for i in 1:n
+		L[i] = lift(f,X[i],path; corrector_steps=corrector_steps)
+	end
+	return L
+end
+function lift(
+	f::ComplexEtaleCover,
+	X::Dict{Symbol, ComplexF64},
+	path::ComplexPath;
+	corrector_steps=2
+)::Dict{Symbol, ComplexPath}
+	n = length(X)
+	N = length(path)
+	L = Dict{Symbol,ComplexPath}()
+	Threads.@threads for k in collect(keys(X))
+		L[k] = lift(f,X[k],path; corrector_steps=corrector_steps)
+	end
+	return L
+end
+
 """
 	monodromy_permutation(
 		f::ComplexEtaleCover{X,Y},
@@ -94,9 +171,10 @@ function monodromy_permutation(
 	corrector_steps=2
 )::Permutation where {X <: Any, Y <: Any}
 	perm = Dict{Symbol,Symbol}()
+	permutedfibers = monodromy(f, fibers, loop; corrector_steps=corrector_steps)
 	for name in keys(fibers)
 		x = fibers[name]
-		y = monodromy(f,x,loop)
+		y = permutedfibers[name]
 		perm[name] = findnearest(fibers,y)
 	end
 	return Permutation(perm)
