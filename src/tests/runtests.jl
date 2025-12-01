@@ -6,4 +6,5 @@ using Monodromy
 	include("permutationtests.jl")
 	include("covertests.jl")
 	include("monodromytests.jl")
+	include("modeltests.jl")
 end

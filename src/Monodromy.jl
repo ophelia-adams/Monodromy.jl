@@ -15,12 +15,12 @@ module Monodromy
 	include("core/covers.jl")
 	include("core/lifting.jl")
 	include("core/permutations.jl")
+	include("core/models.jl")
 
 	include("interact/themes.jl")
 	include("interact/recipes.jl")
 	include("interact/ui.jl")
 	include("interact/interact.jl")
-	include("interact/save.jl")
 
 	include("examples/chebyshev.jl")
 	include("examples/exponential.jl")
@@ -56,6 +56,12 @@ module Monodromy
 	export cycleof
 	export cycles
 	export inverse
+
+	# monodromy models
+	export ComplexMonodromy
+	export reset!
+	export extendpath!
+	export getpermutation
 
 	# interaction functions
 	export interact

@@ -26,6 +26,7 @@ Base.getindex(P::ComplexPath, i::Int) = P.elements[i]
 Base.getindex(P::ComplexPath, u::UnitRange{Int64}) = ComplexPath(P.elements[u.start:u.stop])
 Base.setindex!(P::ComplexPath, p, i::Int) = P.elements[i] = p
 Base.push!(P::ComplexPath, p) = begin push!(P.elements, p); P end
+Base.append!(P::ComplexPath, Q::ComplexPath) = append!(P.elements, Q.elements);
 Base.reverse(P::ComplexPath) = ComplexPath(reverse(copy(P.elements)))
 Base.reverse!(P::ComplexPath) = begin reverse!(P.elements); P end
 Base.pop!(P::ComplexPath) = begin pop!(P.elements); P end

@@ -69,7 +69,7 @@ function monodromy(
 	corrector_steps::Int64=2
 )::Vector{ComplexF64}
 	X = copy(X)
-	Threads.@threads for i in length(X)
+	Threads.@threads for i in 1:length(X)
 		X[i] = monodromy(f,X[i],path;
 			corrector_steps=corrector_steps)
 	end
@@ -170,8 +170,12 @@ function monodromy_permutation(
 	loop::ComplexPath;
 	corrector_steps=2
 )::Permutation where {X <: Any, Y <: Any}
-	perm = Dict{Symbol,Symbol}()
 	permutedfibers = monodromy(f, fibers, loop; corrector_steps=corrector_steps)
+	return permbynearest(fibers, permutedfibers)
+end
+
+function permbynearest(fibers::Dict{Symbol, ComplexF64}, permutedfibers::Dict{Symbol, ComplexF64})::Permutation
+	perm = Dict{Symbol,Symbol}()
 	for name in keys(fibers)
 		x = fibers[name]
 		y = permutedfibers[name]

@@ -102,3 +102,17 @@ function monodromy(
 	return head(lift(C, x, path))
 end
 
+"""
+	AbstractMonodromy
+
+Struct enclosing a particular monodromy situation. Generally, its fields should include:
+
+- `cover::AbstractEtaleCover{X,Y}`
+- `fibers::Dict{Symbol, X}`
+- `base::Y`
+- `lifted_paths::Dict{Symbol, AbstractPath{X}}`
+- `base_path::AbstractPath{Y
+}`
+
+"""
+abstract type AbstractMonodromy end
