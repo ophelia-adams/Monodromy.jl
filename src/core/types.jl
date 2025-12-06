@@ -115,4 +115,15 @@ Struct enclosing a particular monodromy situation. Generally, its fields should 
 }`
 
 """
-abstract type AbstractMonodromy end
+abstract type AbstractMonodromy{X,Y} end
+
+# In principle, these could be implemented over the abstract interface.
+# However, but there are some corner cases that I'd rather leave to the user, plus I haven't
+# implemented anything beyond complex covers and their monodromy.
+
+function extendpath!(am::AbstractMonodromy{X,Y}, P::AbstractPath{Y}) where {X <: Any, Y <: Any}
+	error("`extendpath!` by path not implemented for $(typeof(am))")
+end
+function extendpath!(am::AbstractMonodromy{X,Y}, p::Y) where {X <: Any, Y <: Any}
+	error("`extendpath!` by point not implemented for $(typeof(am))")
+end

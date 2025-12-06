@@ -72,8 +72,8 @@ function _standard_ui()
 
 	#Box(panel_grid[7,1:3])
 
-	btn_undo = Button(panel_grid[9,2:3], label="↺ undo", buttoncolor=_COLORS[:red][:dark])
-	btn_redo = Button(panel_grid[9,6:7], label="↻ redo", buttoncolor=_COLORS[:red][:dark])
+	btn_undo = Button(panel_grid[9,2:3], label="↺ undo")
+	btn_redo = Button(panel_grid[9,6:7], label="↻ redo")
 	btn_clear = Button(panel_grid[9,10:11], label="✕ clear")
 
 	#Box(panel_grid[9,1:3])

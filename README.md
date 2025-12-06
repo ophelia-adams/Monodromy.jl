@@ -26,7 +26,7 @@ You will see a window with three plots: the lift and base on the left, and a 3D 
 
 Mouse controls:
 
-- MB3: clear plot (lift or base)
+- MB3 (on base): reset plots
 - MB2 / MB1+Opt: animated retrace of the current path
 - MB2+Shift / MB1+Opt+Shift: instant retrace of the current path
 - Scroll: zoom in or out
@@ -38,7 +38,7 @@ Panel controls:
 - Close: paths close automatically by default.
 - Lift: animated by default, button is alternative to mouse.
 - Get Permutation: reports its best guess at the permutation for your current path. It will likely error if it is not a loop.
-- Red Buttons: not function right now, but will one day.
+- Red Buttons: not functioning right now, but will one day.
 
 # Quick guide
 

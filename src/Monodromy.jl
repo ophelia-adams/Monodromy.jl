@@ -77,6 +77,9 @@ module Monodromy
 	export interact_rabbits
 	export interact_symmetric_seven
 
+	# new interaction
+	export _interact
+
 	function __init__()
 		set_theme!(OAPlain())
 	end
