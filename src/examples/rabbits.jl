@@ -23,8 +23,7 @@ function interact_rabbits()
 	)
 	fp = -0.28 + 0.48im
 	visdata = interact(
-		rabbit(rabbit(rabbit)),
-		fibers, fp,
+		ComplexMonodromy(rabbit(rabbit(rabbit)), fibers, fp),
 		(-1.5,1.5,-1.5,1.5),(-1.0,0.5,-0.5,1.0)
 	)
 	display(visdata[:fig])

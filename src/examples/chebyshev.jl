@@ -19,7 +19,7 @@ function interact_chebyshev()
 	)
 
 	visdata = interact(
-		T4(), fibers, -1+0.0im,
+		ComplexMonodromy(T4(), fibers, -1+0.0im),
 		(-3,3,-1,1),(-4,4,-3,3)
 	)
 	display(visdata[:fig])

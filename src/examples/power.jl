@@ -26,9 +26,8 @@ Play around with the powering map!
 function interact_power(; degree=3, x=1.0+0.0im)
 	f = Power(degree)
 	visdata = interact(
-		f, x,
-		(-2, 2, -2, 2),
-		(-2, 2, -2, 2)
+		ComplexMonodromy(f, x, 0.0im),
+		(-2, 2, -2, 2), (-2, 2, -2, 2)
 	)
 
 	display(visdata[:fig])

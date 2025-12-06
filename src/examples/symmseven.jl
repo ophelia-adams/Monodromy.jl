@@ -36,8 +36,7 @@ function interact_symmetric_seven()
 	base = -4/3 + 0.0im
 
 	visdata = interact(
-		symmetric_seven(),
-		fibers, base,
+		ComplexMonodromy(symmetric_seven(), fibers, base),
 		(-5,5,-5,5),(-2,2,-2,2)
 	)
 

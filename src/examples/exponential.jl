@@ -18,7 +18,7 @@ function interact_exponential()
 	)
 
 	visdata = interact(
-		ExpCEC(), fibers, exp(1)+0.0im,
+		ComplexMonodromy(ExpCEC(), fibers, exp(1)+0.0im),
 		(-3,3,-30,30),(-4,4,-4,4)
 	)
 	display(visdata[:fig])
