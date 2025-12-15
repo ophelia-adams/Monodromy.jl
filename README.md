@@ -53,21 +53,24 @@ F = ComplexEtaleCover(f,df,branches)
 
 To experiment with it, call `interact` and provide:
 
-- your cover
-- a dictionary of fibers over the base point
-- the actual base point
+- a ComplexMonodromy with
+	- your cover
+	- a dictionary of fibers over the base point
+	- the actual base point
 - limits for the lift plot
 - limits for the base plot
 
 The names are used as symbols when representing the permutation, and for display on the plot.
-
 
 ```
 fibers = Dict(:z => 0.0im, :a => 3.45 + 0.0im, :b => -3.45 + 0.0im)
 base_pt = 0.0im
 ll = (-5,5,-3,3)
 lb = (-25,25,-20,20)
-plotdata = interact(F, fibers, base_pt, ll, lb)
+plotdata = interact(
+	ComplexMonodromy(F, fibers, base_pt),
+	ll, lb
+)
 display(plotdata[:fig])
 ```
 
